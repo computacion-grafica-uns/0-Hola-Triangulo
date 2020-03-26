@@ -1,33 +1,22 @@
+import { getCanvasElement, getWebGL2Context, createShader, createProgram, createVertexBuffer, bindAttributeToVertexBuffer } from "./utils/gl-utils.js"
+import { vertexShaderSourceCode, fragmentShaderSourceCode } from "./utils/shaders.js"
+
 // #️⃣ Configuración base de WebGL
 
 // Encontramos el canvas y obtenemos su contexto de WebGL
-const canvas = document.getElementById('canvas')
-const gl = canvas.getContext('webgl2')
+const canvas = getCanvasElement('canvas')
+const gl = getWebGL2Context(canvas)
 
 // Seteamos el color que vamos a usar para 'limpiar' el canvas (i.e. el color de fondo)
 gl.clearColor(0, 0, 0, 1)
 
 // #️⃣ Creamos los shaders, el programa que vamos a usar, y guardamos info de sus atributos
 
-// Shader de vértices
-const vertexShaderSourceCode = getVertexShaderSourceCode()
-const vertexShader = gl.createShader(gl.VERTEX_SHADER)
-gl.shaderSource(vertexShader, vertexShaderSourceCode)
-gl.compileShader(vertexShader)
+const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSourceCode)
+const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSourceCode)
 
-// Shader de fragmentos
-const fragmentShaderSourceCode = getFragmentShaderSourceCode()
-const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)
-gl.shaderSource(fragmentShader, fragmentShaderSourceCode)
-gl.compileShader(fragmentShader)
+const program = createProgram(gl, vertexShader, fragmentShader)
 
-// Combinamos los shaders en un programa
-const program = gl.createProgram()
-gl.attachShader(program, vertexShader)
-gl.attachShader(program, fragmentShader)
-gl.linkProgram(program)
-
-// Obtenemos la ubicación de los atributos del programa
 const vertexPositionLocation = gl.getAttribLocation(program, 'vertexPosition')
 
 // #️⃣ Definimos la info de la geometría que vamos a dibujar (un triangulo)
@@ -47,10 +36,7 @@ const vertexPositions = [
 
 // #️⃣ Guardamos la info del triangulo (i.e. la posición de sus vértices) en Vertex Buffer Objects (VBOs)
 
-const vertexPositionsBuffer = gl.createBuffer()
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionsBuffer)
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositions), gl.STATIC_DRAW)
-gl.bindBuffer(gl.ARRAY_BUFFER, null)
+const vertexPositionsBuffer = createVertexBuffer(gl, vertexPositions)
 
 // #️⃣ Asociamos los atributos del programa a los buffers creados
 
@@ -62,9 +48,7 @@ gl.bindVertexArray(vertexArray)
 
 // Habilitamos el atributo 'vertexPosition' y lo conectamos a su buffer
 gl.enableVertexAttribArray(vertexPositionLocation)
-gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionsBuffer)
-gl.vertexAttribPointer(vertexPositionLocation, 2, gl.FLOAT, false, 0, 0)
-gl.bindBuffer(gl.ARRAY_BUFFER, null)
+bindAttributeToVertexBuffer(gl, vertexPositionLocation, 2, vertexPositionsBuffer)
 
 // Dejamos de tomar nota en el VAO
 gl.bindVertexArray(null)
@@ -87,31 +71,3 @@ gl.clear(gl.COLOR_BUFFER_BIT)
 
 // Y dibujamos 🎨 (al fin!)
 gl.drawArrays(gl.TRIANGLES, 0, vertexCount)
-
-
-
-
-// Funciones Auxiliares - Código Fuente de Shaders
-
-function getVertexShaderSourceCode() {
-  return `#version 300 es
-
-    in vec2 vertexPosition;
-
-    void main() {
-      gl_Position = vec4(vertexPosition, 0, 1);
-    }
-  `
-}
-
-function getFragmentShaderSourceCode() {
-  return `#version 300 es
-    precision mediump float;
-
-    out vec4 fragmentColor;
-
-    void main() {
-      fragmentColor = vec4(0.2, 0.4, 1, 1);
-    }
-  `
-}
