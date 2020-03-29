@@ -45,7 +45,7 @@ const vertexPositions = [
  * pero más adelante vamos a ver el por qué de la convención y su importancia).
  */
 
-// #️⃣ Guardamos la info del triangulo (i.e. la posición de sus vértices) en buffers
+// #️⃣ Guardamos la info del triangulo (i.e. la posición de sus vértices) en Vertex Buffer Objects (VBOs)
 
 const vertexPositionsBuffer = gl.createBuffer()
 gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionsBuffer)
@@ -54,11 +54,11 @@ gl.bindBuffer(gl.ARRAY_BUFFER, null)
 
 // #️⃣ Asociamos los atributos del programa a los buffers creados
 
-// Creamos un VAO (Vertex Array Object), encargado de tomar nota de cada conexión atributo-buffer 
-const vertexArrayObject = gl.createVertexArray()
+// Creamos un Vertex Array Object (VAO), encargado de tomar nota de cada conexión atributo-buffer
+const vertexArray = gl.createVertexArray()
 
 // A partir de aca, el VAO registra cada atributo habilitado y su conexión con un buffer
-gl.bindVertexArray(vertexArrayObject)
+gl.bindVertexArray(vertexArray)
 
 // Habilitamos el atributo 'vertexPosition' y lo conectamos a su buffer
 gl.enableVertexAttribArray(vertexPositionLocation)
@@ -78,7 +78,7 @@ gl.bindVertexArray(null)
 // #️⃣ Establecemos el programa a usar y sus conexiónes atributo-buffer (el VAO)
 
 gl.useProgram(program)
-gl.bindVertexArray(vertexArrayObject)
+gl.bindVertexArray(vertexArray)
 
 // #️⃣ Dibujamos la escena (nuestro majestuoso triangulo)
 
