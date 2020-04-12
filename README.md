@@ -7,7 +7,6 @@
 ### Branches 🌳
 
 - `con posiciones`
-- `refactor`
 - `con posiciones y colores`
 
 ### Referencias 📚
