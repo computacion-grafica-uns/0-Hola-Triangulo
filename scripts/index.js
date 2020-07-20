@@ -1,4 +1,4 @@
-import { getCanvasElement, getWebGL2Context, createShader, createProgram, createVertexBuffer, bindAttributeToVertexBuffer } from "./gl-utils.js"
+import { getCanvasElement, getWebGL2Context, createShader, createProgram, createVertexBuffer, bindAttributeToVertexBuffer } from "./utils.js"
 import { vertexShaderSourceCode, fragmentShaderSourceCode } from "./shaders.js"
 
 // #️⃣ Configuración base de WebGL
