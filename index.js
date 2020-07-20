@@ -36,7 +36,7 @@ const vertexPositions = [
 
 // #️⃣ Guardamos la info del triangulo (i.e. la posición de sus vértices) en Vertex Buffer Objects (VBOs)
 
-const vertexPositionsBuffer = createVertexBuffer(gl, vertexPositions)
+const vertexPositionBuffer = createVertexBuffer(gl, vertexPositions)
 
 // #️⃣ Asociamos los atributos del programa a los buffers creados
 
@@ -48,14 +48,14 @@ gl.bindVertexArray(vertexArray)
 
 // Habilitamos el atributo 'vertexPosition' y lo conectamos a su buffer
 gl.enableVertexAttribArray(vertexPositionLocation)
-bindAttributeToVertexBuffer(gl, vertexPositionLocation, 2, vertexPositionsBuffer)
+bindAttributeToVertexBuffer(gl, vertexPositionLocation, 2, vertexPositionBuffer)
 
 // Dejamos de tomar nota en el VAO
 gl.bindVertexArray(null)
 
 /* 📝 Nuestro VAO ahora mantiene registro de que el atributo 'vertexPosition' de nuestro programa
  * (representado por su ubicación 'vertexPositionLocation') va a obtener su información del
- * 'vertexPositionsBuffer', y que cada cada vez que tenga que obtener un dato (i.e. la posición de
+ * 'vertexPositionBuffer', y que cada cada vez que tenga que obtener un dato (i.e. la posición de
  * un vértice) tiene que leer de a 2 items del buffer (las coordenadas x e y de cada vértice).
  */
 
